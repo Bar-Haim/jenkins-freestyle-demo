@@ -1,0 +1,55 @@
+pipeline {
+    agent any
+
+    stages {
+
+        // שלב 1 – הדפסת טקסט פשוט
+        stage('Echo') {
+            steps {
+                echo 'היי בר! זה השלב הראשון'
+            }
+        }
+
+        // שלב 2 – קלט מהמשתמש
+        stage('Input Approval') {
+            steps {
+                input message: 'האם להמשיך?', ok: 'כן!'
+            }
+        }
+
+        // שלב 3 – ירוץ רק אם לא על סניף master
+        stage('Not on master') {
+            when {
+                not {
+                    branch 'master'
+                }
+            }
+            steps {
+                echo 'אנחנו לא על master – מותר להמשיך! 😎'
+            }
+        }
+
+        // שלב 4 – הרצה מקבילית של בדיקות
+        stage('Parallel Testing') {
+            parallel {
+                stage('Unit Tests') {
+                    steps {
+                        echo 'מריץ בדיקות יחידה... ✅'
+                    }
+                }
+                stage('Integration Tests') {
+                    agent {
+                        docker {
+                            image 'ubuntu'
+                            reuseNode true
+                        }
+                    }
+                    steps {
+                        echo 'מריץ בדיקות אינטגרציה בתוך קונטיינר Docker 🐳'
+                    }
+                }
+            }
+        }
+
+    }
+}
