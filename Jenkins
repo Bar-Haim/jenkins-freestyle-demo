@@ -1,0 +1,49 @@
+pipeline {
+    agent any
+
+    stages {
+
+        stage('Print Hello') {
+            steps {
+                echo '🚀 מתחילים את הפייפליין'
+            }
+        }
+
+        stage('User Approval') {
+            steps {
+                input message: "להמשיך להריץ את השלבים?", ok: "כן, תמשיך"
+            }
+        }
+
+        stage('Only if NOT on test') {
+            when {
+                not {
+                    branch 'test'
+                }
+            }
+            steps {
+                echo '✅ את/ה לא בסניף test – ממשיכים!'
+            }
+        }
+
+        stage('Parallel Testing') {
+            parallel {
+                stage('Unit Test') {
+                    steps {
+                        echo '🧪 מריץ בדיקות יחידה...'
+                        sleep time: 2, unit: 'SECONDS'
+                        echo 'סיימנו את בדיקות היחידה!'
+                    }
+                }
+                stage('Integration Test') {
+                    steps {
+                        echo '🔗 מריץ בדיקות אינטגרציה...'
+                        sleep time: 3, unit: 'SECONDS'
+                        echo 'סיימנו את בדיקות האינטגרציה!'
+                    }
+                }
+            }
+        }
+
+    }
+}
