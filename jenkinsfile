@@ -1,19 +1,1 @@
-pipeline {
-    agent any
-    stages {
-        stage('Echo') {
-            steps {
-                echo 'hello world from the testtttt'
-            }
-        }
 
-        stage('Only on test') {
-            when {
-                branch 'test'
-            }
-            steps {
-                echo 'בר נמצאת על הסניף test 🎯'
-            }
-        }
-    }
-}
