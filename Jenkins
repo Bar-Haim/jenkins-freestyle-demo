@@ -1,35 +1,52 @@
 pipeline {
-     agent any
-     stages {
-         stage('One') {
-         steps {
-         echo 'Hi, this is Zulaikha from edureka'
-         }
-         }
-         stage('Two') {
-         steps {
-             input('Do you want to proceed?')
-         }
-         }
-         stage('Three') {
-         when {
-             not {
-                 branch "main"
-             }
-         }
-         steps { 
-            echo "Hello"
-         }
-         }
-         stage('Four') {
-         parallel {
-         stage('Unit Test') {
-         steps {
-         echo "Running the unit test..."
-         }
+    agent any
+
+    stages {
+
+        stage('Print Hello') {
+            steps {
+                echo '🚀 מתחילים את הפייפליין'
+            }
         }
-        
-}
-}
-}
+
+        stage('User Approval') {
+            steps {
+                input {
+                    message "להמשיך להריץ את השלבים?"
+                    ok "כן, תמשיך"
+                }
+            }
+        }
+
+        stage('Only if NOT on master') {
+            when {
+                not {
+                    branch 'main'
+                }
+            }
+            steps {
+                echo '✅ את/ה לא בסניף main – ממשיכים!'
+            }
+        }
+
+        stage('Parallel Testing') {
+            parallel {
+                stage('Unit Test') {
+                    steps {
+                        echo '🧪 מריץ בדיקות יחידה...'
+                        sleep time: 2, unit: 'SECONDS'
+                        echo 'סיימנו את בדיקות היחידה!'
+                    }
+                }
+                stage('Integration Test') {
+                    steps {
+                        echo '🔗 מריץ בדיקות אינטגרציה...'
+                        sleep time: 3, unit: 'SECONDS'
+                        echo 'סיימנו את בדיקות האינטגרציה!'
+                    }
+                }
+            }
+        }
+
+    }
 }
