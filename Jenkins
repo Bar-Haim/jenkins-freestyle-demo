@@ -15,14 +15,14 @@ pipeline {
             }
         }
 
-        stage('Only if NOT on main') {
+        stage('Only if NOT on test') {
             when {
                 not {
-                    branch 'main'
+                    branch 'test'
                 }
             }
             steps {
-                echo '✅ את/ה לא בסניף main – ממשיכים!'
+                echo '✅ את/ה לא בסניף test – ממשיכים!'
             }
         }
 
