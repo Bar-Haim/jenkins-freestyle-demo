@@ -11,14 +11,11 @@ pipeline {
 
         stage('User Approval') {
             steps {
-                input {
-                    message "להמשיך להריץ את השלבים?"
-                    ok "כן, תמשיך"
-                }
+                input message: "להמשיך להריץ את השלבים?", ok: "כן, תמשיך"
             }
         }
 
-        stage('Only if NOT on master') {
+        stage('Only if NOT on main') {
             when {
                 not {
                     branch 'main'
